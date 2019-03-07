@@ -129,8 +129,8 @@ export default {
     color: #999;
   }
   .info {
-    margin-bottom: 6px;
-    margin-right: 10px;
+    padding-bottom: 6px;
+    padding-right: 10px;
   }
   .card__item-delete {
     position: absolute;
