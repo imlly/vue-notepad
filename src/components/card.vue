@@ -29,7 +29,7 @@ export default {
     notes: { type: Array, default: () => [] }
   },
   data() {
-    return { startX: 0, endX: 0 };
+    return { startX: 0, endX: 0, startY: 0, endY: 0 };
   },
   computed: {
     showCard() {
@@ -47,10 +47,16 @@ export default {
       this.$emit("click-delete", id);
     },
     handleTouchstart(e) {
-      this.startX = e.touches[0].clientX;
+      const touch = e.touches[0];
+      this.startX = touch.clientX;
+      this.startY = touch.clientY;
     },
     handleTouchend(e) {
       let pel = e.target.parentElement;
+      this.endY = e.changedTouches[0].clientY;
+      if (Math.abs(this.startY - this.endY) > 80) {
+        return;
+      }
       this.endX = e.changedTouches[0].clientX;
       if (pel.dataset.type == 0 && this.startX - this.endX > 30) {
         this.restSlide();
@@ -62,6 +68,8 @@ export default {
       }
       this.startX = 0;
       this.endX = 0;
+      this.startY = 0;
+      this.endY = 0;
     },
     restSlide() {
       let cardItems = document.querySelectorAll(".card__item");
