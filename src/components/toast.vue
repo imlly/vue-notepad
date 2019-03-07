@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="note_mask_transparent" v-show="isShowMask && show"></div>
-    <div class="note_toast" :class="toastClass" v-show="show">
+    <div class="note_toast" v-show="show">
       <div class="note_toast_main">
         <p class="note_toast_content" v-if="text" v-html="text"></p>
         <p class="note_toast_content" v-if="!text">
@@ -16,7 +16,7 @@
 export default {
   props: {
     value: Boolean,
-    time: { type: Number, default: 2000 },
+    time: { type: Number, default: 1000 },
     width: { type: String, default: "7.6em" },
     isShowMask: { type: Boolean, default: false },
     text: { type: String }
@@ -62,21 +62,23 @@ export default {
   position: fixed;
   z-index: 101;
   min-height: 7.6em;
-  top: 180px;
+  top: 120px;
   text-align: center;
   left: 0;
   right: 0;
   color: #ffffff;
-}
-.note_toast_main {
-  background: rgba(40, 40, 40, 0.75);
-  padding: 0 0.1rem;
-  border-radius: 0.05rem;
-  display: inline-block;
-  max-width: 80%;
-  min-width: 7.6em;
-}
-.note_toast_content {
-  margin: 0 0 15px;
+  .note_toast_main {
+    background: rgba(40, 40, 40, 0.75);
+    padding: 0 10px;
+    border-radius: 5px;
+    display: inline-block;
+    max-width: 80%;
+    min-width: 7.6em;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .note_toast_content {
+    margin: 10px 0;
+  }
 }
 </style>

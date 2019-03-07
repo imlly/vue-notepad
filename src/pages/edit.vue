@@ -7,11 +7,13 @@
       show-right-icon
       @click-left="handleClickBack"
     >
-      <div class="right-icon" slot="right" v-if="noteChanged" @click="handleSaveNote">
-        <div class="save-icon"></div>
-      </div>
-      <div class="right-icon" slot="right" v-else-if="!isAdd" @click="handleDeleteNote">
-        <div class="del-icon"></div>
+      <div style="display: flex" slot="right">
+        <div class="icon-wrap" v-if="noteChanged" @click="handleSaveNote">
+          <div class="save-icon"></div>
+        </div>
+        <div class="icon-wrap" v-if="!isAdd" @click="handleDeleteNote">
+          <div class="del-icon"></div>
+        </div>
       </div>
     </note-header>
     <div class="note-page edit-page">
@@ -37,12 +39,9 @@ export default {
     NoteHeader,
     NoteTextarea
   },
-  props: {
-    ds: { type: Object, isRequired: true }
-  },
   data() {
     const noteId = this.$route.params.id;
-    const activeNote = this.ds.getNote(noteId);
+    const activeNote = this.$dataSource.getNote(noteId);
     return {
       activeNote,
       currTitle: activeNote.title || "",
@@ -69,27 +68,53 @@ export default {
     },
     handleDeleteNote() {
       if (this.activeNote.id >= 0) {
-        this.ds.deleteNote(this.activeNote.id);
-        this.$router.back();
+        try {
+          this.$dataSource.deleteNote(this.activeNote.id);
+          this.$bus.emit("show-toast", "删除成功");
+          this.$router.back();
+        } catch (e) {
+          this.$bus.emit("show-toast", `删除失败：${e.message || "未知错误"}`);
+        }
       }
     },
     handleSaveNote() {
+      if (!this.currTitle) {
+        this.$bus.emit("show-toast", "请输入笔记标题");
+        return;
+      }
+      if (this.currTitle.trim().length > 20) {
+        this.$bus.emit("show-toast", "笔记标题字数不能超过20个");
+        return;
+      }
       const newNote = {
         title: this.currTitle,
         detail: this.currDetail
       };
       if (this.activeNote.id >= 0) {
-        this.ds.modifyNote({
-          ...this.activeNote,
-          ...newNote
-        });
+        try {
+          this.activeNote = this.$dataSource.modifyNote({
+            ...this.activeNote,
+            ...newNote
+          });
+          this.$bus.emit("show-toast", "修改成功");
+        } catch (e) {
+          this.$bus.emit("show-toast", `修改失败：${e.message || "未知错误"}`);
+        }
       } else {
-        this.ds.saveNote({
-          ...this.activeNote,
-          ...newNote
-        });
+        try {
+          this.activeNote = this.$dataSource.saveNote({
+            ...this.activeNote,
+            ...newNote
+          });
+          this.$bus.emit("show-toast", "新建成功");
+        } catch (e) {
+          this.$bus.emit("show-toast", `新建失败：${e.message || "未知错误"}`);
+        }
       }
     }
+  },
+  mounted() {
+    window.scrollTo(0, 0);
   }
 };
 </script>
@@ -102,12 +127,5 @@ export default {
   .block__title {
     color: #666;
   }
-}
-.right-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
 }
 </style>

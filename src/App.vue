@@ -1,21 +1,25 @@
 <template>
   <div id="app">
     <transition :name="transitionName">
-      <router-view :ds="dataSource"></router-view>
+      <router-view></router-view>
     </transition>
+    <toast v-model="isShowToast" :time="toastDuration" :text="toastTitle"></toast>
   </div>
 </template>
 
 <script>
-import { getPlatform } from "@utils/index.js";
-import DataSource from "./data-source.js";
+import Toast from "@components/toast";
+// import { getPlatform } from "@utils/index.js";
 
 export default {
   name: "vue-notepad",
+  components: { Toast },
   data() {
     return {
-      dataSource: new DataSource(),
-      transitionName: "slide-left"
+      transitionName: "slide-left",
+      isShowToast: false,
+      toastDuration: 1500,
+      toastTitle: ""
     };
   },
   watch: {
@@ -35,6 +39,24 @@ export default {
         this.transitionName = "slide-left";
       }
     }
+  },
+  created() {
+    if (this.$bus) {
+      this.$bus.on("show-toast", this.showToast);
+      this.$bus.on("hide-toast", this.hideToast);
+    }
+  },
+  methods: {
+    showToast(title, type, duration) {
+      this.isShowToast = true;
+      this.toastTitle = title;
+      if (duration > 0) {
+        this.toastDuration = duration;
+      }
+    },
+    hideToast() {
+      this.isShowToast = false;
+    }
   }
 };
 </script>
@@ -53,7 +75,7 @@ export default {
 }
 .slide-left-enter-active,
 .slide-right-enter-active {
-  transition: transform 0.3s ease, opacity 0.1s ease;
+  transition: transform 0.4s ease, opacity 0.1s ease;
   z-index: 1;
 }
 .slide-right-enter-active {
@@ -62,7 +84,7 @@ export default {
 .slide-left-leave-active,
 .slide-right-leave-active {
   z-index: -1;
-  transition: transform 0.3s ease, opacity 0.3s ease-in;
+  transition: transform 0.4s ease, opacity 0.3s ease-in;
 }
 .slide-right-leave-active {
   z-index: 1;

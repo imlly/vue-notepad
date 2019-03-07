@@ -2,7 +2,7 @@
   <div class="note-header" :class="{ shadow: canClickHeader }" @click="handleClickHeader">
     <div class="header__icon left" v-if="showLeftIcon" @click.stop="handleClickLeft"></div>
     <div class="header__title">{{title}}</div>
-    <div class="header__icon right" v-if="showLeftIcon">
+    <div class="header__icon right" v-if="showRightIcon">
       <slot name="right"></slot>
     </div>
   </div>
@@ -70,9 +70,9 @@ export default {
   right: 0px;
   height: 47px;
   padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
   z-index: 10;
   background-color: #fff;
 
@@ -88,7 +88,10 @@ export default {
     font-weight: bold;
   }
   .header__icon.left {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
     width: 40px;
     height: 40px;
     // margin-left: -6px;
@@ -99,19 +102,23 @@ export default {
       content: "";
       position: absolute;
       // left: calc(50% + 2px);
-      left: 0;
+      left: 14px;
       top: 50%;
       // transform: translate(-50%, -50%) rotate(-45deg);
       transform: translateY(-50%) rotate(-45deg);
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       border: none;
       border-top: 2px solid #333;
       border-left: 2px solid #333;
     }
   }
   .header__icon.right {
-    width: 40px;
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    min-width: 36px;
     height: 40px;
     display: flex;
     align-items: center;

@@ -20,9 +20,6 @@ function formatYMD(dateObj) {
     dateObj.getDate()
   )}`;
 }
-function formatYM(dateObj) {
-  return `${dateObj.getFullYear()}${fz(dateObj.getMonth() + 1)}`;
-}
 function formatHM(dateObj) {
   return `${fz(dateObj.getHours())}:${fz(dateObj.getMinutes())}`;
 }

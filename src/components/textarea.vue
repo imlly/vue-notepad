@@ -44,8 +44,8 @@ export default {
         this.error = true;
       } else {
         this.error = false;
-        this.$emit("input", this.v);
       }
+      this.$emit("input", this.v);
     }
   },
   data() {

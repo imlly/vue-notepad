@@ -48,9 +48,10 @@ export default {
   padding-left: 12px;
 
   .card__name {
-    color: #fec200;
-    padding: 8px 0;
-    // border-bottom: 1px solid #ddd;
+    // color: #fec200;
+    color: #5470fe;
+    padding: 12px 0;
+    font-weight: 500;
   }
 
   .item__container {
@@ -62,7 +63,7 @@ export default {
   }
 
   .card__item {
-    padding: 10px 0;
+    padding: 12px 0;
   }
   .card__item-title {
     font-size: 16px;
@@ -77,7 +78,7 @@ export default {
     color: #999;
   }
   .info {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     margin-right: 10px;
   }
 }

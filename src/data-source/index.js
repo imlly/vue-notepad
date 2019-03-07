@@ -1,4 +1,4 @@
-// import { mockData } from "./mock.js";
+import { mockData } from "./mock-data.js";
 import { formatNoteTitle } from "@utils/index";
 import { NOTE_STATUS } from "@consts/index.js";
 
@@ -16,10 +16,17 @@ export default class DataSource {
     try {
       const dataStr = _ls.getItem(this.storageKey);
       this.allNotes = JSON.parse(dataStr) || [];
-      // this.allNotes = mockData;
     } catch (e) {
       this.allNotes = [];
       _ls.removeItem(this.storageKey);
+    }
+  }
+  useMockData() {
+    try {
+      _ls.setItem(this.storageKey, JSON.stringify(mockData));
+      this.allNotes = mockData;
+    } catch (e) {
+      throw e;
     }
   }
   getGroupedNotes() {
@@ -54,8 +61,9 @@ export default class DataSource {
     try {
       _ls.setItem(this.storageKey, JSON.stringify(newAllNotes));
       this.allNotes = newAllNotes;
+      return no;
     } catch (e) {
-      // console.error("save sync error");
+      throw e;
     }
   }
   deleteNote(noteId) {
@@ -64,20 +72,22 @@ export default class DataSource {
       _ls.setItem(this.storageKey, JSON.stringify(newAllNotes));
       this.allNotes = newAllNotes;
     } catch (e) {
-      // console.error("delete sync error");
+      throw e;
     }
   }
   modifyNote(noteObj) {
     const oldObj = this.allNotes.find(n => n.id === +noteObj.id) || {};
+    const no = { ...oldObj, ...noteObj, modifyTime: Date.now() };
     const newAllNotes = [
       ...(this.allNotes.filter(n => n.id !== +noteObj.id) || []),
-      { ...oldObj, ...noteObj, modifyTime: Date.now() }
+      no
     ];
     try {
       _ls.setItem(this.storageKey, JSON.stringify(newAllNotes));
       this.allNotes = newAllNotes;
+      return no;
     } catch (e) {
-      // console.error("modify sync error");
+      throw e;
     }
   }
 }
