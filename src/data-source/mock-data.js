@@ -10,6 +10,14 @@ export const mockData = [
     status: NOTE_STATUS.UNDONE
   },
   {
+    id: 9,
+    time: new Date("2019/02/14 17:04:00").getTime(),
+    title: "阴雨天出门一定要记得带伞！",
+    detail: "",
+    level: "",
+    status: NOTE_STATUS.UNDONE
+  },
+  {
     id: 2,
     time: new Date("2019/01/01 12:04:00").getTime(),
     title: "最近超火的电影",

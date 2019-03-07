@@ -13,6 +13,7 @@
           :title="item.title"
           :notes="item.notes"
           @click-item="handleClickNoteItem"
+          @click-delete="handleDeleteNote"
         />
       </template>
       <no-result v-else message="还没有笔记，快快新建吧~" show-mock-btn @click-mock-btn="handleUseMockData"/>
@@ -46,6 +47,15 @@ export default {
         name: "note-edit",
         params: { id }
       });
+    },
+    handleDeleteNote(id) {
+      try {
+        this.$dataSource.deleteNote(id);
+        this.groupedList = this.$dataSource.getGroupedNotes();
+        this.$bus.emit("show-toast", "删除成功");
+      } catch (e) {
+        this.$bus.emit("show-toast", `删除失败：${e.message || "未知错误"}`);
+      }
     },
     handleClickAddBtn() {
       this.$router.push({

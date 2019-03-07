@@ -4,13 +4,17 @@
     <div class="item__container">
       <div
         v-for="(note, index) in notes"
+        data-type="0"
         :key="`${index}_${note.id}`"
         class="card__item one-px-line-bottom"
         @click="handleClickItem(note.id)"
+        @touchstart.capture="handleTouchstart"
+        @touchend.capture="handleTouchend"
       >
         <div class="card__item-title ellipsis info">{{note.title}}</div>
         <div class="card__item-content ellipsis info">{{note.detail}}</div>
         <div class="card__item-time">{{formatNoteTime(note.time)}}</div>
+        <div class="card__item-delete" @click.stop="handleClickDelete(note.id)">删除</div>
       </div>
     </div>
   </div>
@@ -24,6 +28,9 @@ export default {
     title: { type: String, isRequired: true },
     notes: { type: Array, default: () => [] }
   },
+  data() {
+    return { startX: 0, endX: 0 };
+  },
   computed: {
     showCard() {
       return this.notes.length > 0;
@@ -32,7 +39,35 @@ export default {
   methods: {
     formatNoteTime,
     handleClickItem(id) {
+      this.restSlide();
       this.$emit("click-item", id);
+    },
+    handleClickDelete(id) {
+      this.restSlide();
+      this.$emit("click-delete", id);
+    },
+    handleTouchstart(e) {
+      this.startX = e.touches[0].clientX;
+    },
+    handleTouchend(e) {
+      let pel = e.target.parentElement;
+      this.endX = e.changedTouches[0].clientX;
+      if (pel.dataset.type == 0 && this.startX - this.endX > 30) {
+        this.restSlide();
+        pel.dataset.type = 1;
+      }
+      if (pel.dataset.type == 1 && this.startX - this.endX < -20) {
+        this.restSlide();
+        pel.dataset.type = 0;
+      }
+      this.startX = 0;
+      this.endX = 0;
+    },
+    restSlide() {
+      let cardItems = document.querySelectorAll(".card__item");
+      for (let i = 0; i < cardItems.length; i++) {
+        cardItems[i].dataset.type = 0;
+      }
     }
   }
 };
@@ -46,9 +81,9 @@ export default {
   margin-top: 10px;
   margin-top: 15px;
   padding-left: 12px;
+  overflow: hidden;
 
   .card__name {
-    // color: #fec200;
     color: #5470fe;
     padding: 12px 0;
     font-weight: 500;
@@ -64,6 +99,14 @@ export default {
 
   .card__item {
     padding: 12px 0;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+  }
+  .card__item[data-type="0"] {
+    transform: translateX(0);
+  }
+  .card__item[data-type="1"] {
+    transform: translateX(-80px);
   }
   .card__item-title {
     font-size: 16px;
@@ -80,6 +123,19 @@ export default {
   .info {
     margin-bottom: 6px;
     margin-right: 10px;
+  }
+  .card__item-delete {
+    position: absolute;
+    top: -1px;
+    bottom: 1px;
+    right: -80px;
+    width: 80px;
+    color: white;
+    background-color: #fe381e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
   }
 }
 </style>
