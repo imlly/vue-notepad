@@ -1,7 +1,7 @@
 <template>
   <div class="common-page">
     <note-header title="我的笔记" show-right-icon>
-      <div class="icon-wrap" slot="right" @click="handleClickAddBtn">
+      <div class="icon-wrap" slot="right" @click.stop="handleClickAddBtn">
         <div class="cross-icon top"></div>
       </div>
     </note-header>

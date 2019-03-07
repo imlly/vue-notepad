@@ -8,10 +8,10 @@
       @click-left="handleClickBack"
     >
       <div style="display: flex" slot="right">
-        <div class="icon-wrap" v-if="noteChanged" @click="handleSaveNote">
+        <div class="icon-wrap" v-if="noteChanged" @click.stop="handleSaveNote">
           <div class="save-icon"></div>
         </div>
-        <div class="icon-wrap" v-if="!isAdd" @click="handleClickDeleteBtn">
+        <div class="icon-wrap" v-if="!isAdd" @click.stop="handleClickDeleteBtn">
           <div class="del-icon"></div>
         </div>
       </div>
