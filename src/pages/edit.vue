@@ -75,7 +75,10 @@ export default {
   },
   methods: {
     handleClickBack() {
-      this.$router.back();
+      this.$bus.emit("click-back");
+      this.$nextTick(() => {
+        this.$router.back();
+      });
     },
     handleClickDeleteBtn() {
       this.showConfirm = true;

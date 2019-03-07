@@ -9,7 +9,7 @@
 
 <script>
 import Toast from "@components/toast";
-// import { getPlatform } from "@utils/index.js";
+import { getPlatform } from "@utils/index.js";
 
 export default {
   name: "vue-notepad",
@@ -19,7 +19,8 @@ export default {
       transitionName: "slide-left",
       isShowToast: false,
       toastDuration: 1500,
-      toastTitle: ""
+      toastTitle: "",
+      clickBack: false
     };
   },
   watch: {
@@ -31,10 +32,11 @@ export default {
       };
       const toStep = getStep(to.path);
       const fromStep = getStep(from.path);
-      // const platform = getPlatform();
-      const platform = "";
+      const platform = getPlatform();
       if (toStep < fromStep) {
-        this.transitionName = platform !== "ios" ? "slide-right" : "";
+        this.transitionName =
+          platform !== "ios" || this.clickBack ? "slide-right" : "";
+        this.clickBack = false;
       } else {
         this.transitionName = "slide-left";
       }
@@ -44,6 +46,9 @@ export default {
     if (this.$bus) {
       this.$bus.on("show-toast", this.showToast);
       this.$bus.on("hide-toast", this.hideToast);
+      this.$bus.on("click-back", () => {
+        this.clickBack = true;
+      });
     }
   },
   methods: {
