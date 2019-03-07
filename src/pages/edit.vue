@@ -11,7 +11,7 @@
         <div class="icon-wrap" v-if="noteChanged" @click="handleSaveNote">
           <div class="save-icon"></div>
         </div>
-        <div class="icon-wrap" v-if="!isAdd" @click="handleDeleteNote">
+        <div class="icon-wrap" v-if="!isAdd" @click="handleClickDeleteBtn">
           <div class="del-icon"></div>
         </div>
       </div>
@@ -26,18 +26,28 @@
         <note-textarea placeholder="请输入笔记内容" v-model="currDetail"/>
       </div>
     </div>
+    <note-confirm
+      v-model="showConfirm"
+      header-text="请您确认"
+      body-text="您确认要删除这条笔记吗？"
+      show-cancel
+      @confirm="handleConfirmDelete"
+      @cancel="handleCancelDelete"
+    ></note-confirm>
   </div>
 </template>
 
 <script>
 import NoteHeader from "@components/header.vue";
 import NoteTextarea from "@components/textarea.vue";
+import NoteConfirm from "@components/confirm.vue";
 
 export default {
   name: "note-edit",
   components: {
     NoteHeader,
-    NoteTextarea
+    NoteTextarea,
+    NoteConfirm
   },
   data() {
     const noteId = this.$route.params.id;
@@ -45,7 +55,8 @@ export default {
     return {
       activeNote,
       currTitle: activeNote.title || "",
-      currDetail: activeNote.detail || ""
+      currDetail: activeNote.detail || "",
+      showConfirm: false
     };
   },
   computed: {
@@ -65,6 +76,15 @@ export default {
   methods: {
     handleClickBack() {
       this.$router.back();
+    },
+    handleClickDeleteBtn() {
+      this.showConfirm = true;
+    },
+    handleConfirmDelete() {
+      this.handleDeleteNote();
+    },
+    handleCancelDelete() {
+      this.showConfirm = false;
     },
     handleDeleteNote() {
       if (this.activeNote.id >= 0) {

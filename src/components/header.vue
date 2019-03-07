@@ -1,15 +1,16 @@
 <template>
-  <div class="note-header" :class="{ shadow: canClickHeader }" @click="handleClickHeader">
+  <header class="note-header" :class="{ shadow: canClickHeader }" @click="handleClickHeader">
     <div class="header__icon left" v-if="showLeftIcon" @click.stop="handleClickLeft"></div>
     <div class="header__title">{{title}}</div>
     <div class="header__icon right" v-if="showRightIcon">
       <slot name="right"></slot>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
-import { throttle } from "@utils/index";
+import { throttle, getPlatform } from "@utils/index";
+
 export default {
   props: {
     title: { type: String, isRequired: true },
@@ -25,8 +26,11 @@ export default {
     },
     handleClickHeader() {
       if (!this.canClickHeader) return;
-      // const el = window.document.body;
-      const el = window.document.documentElement;
+      const el =
+        getPlatform() === "ios"
+          ? window.document.body
+          : window.document.documentElement;
+      // const el = window.document.documentElement;
       const startTime = Date.now();
       const time = 200;
       const offset = el.scrollTop;
@@ -70,9 +74,6 @@ export default {
   right: 0px;
   height: 47px;
   padding: 0 20px;
-  // display: flex;
-  // align-items: center;
-  // justify-content: space-between;
   z-index: 10;
   background-color: #fff;
 
@@ -94,17 +95,12 @@ export default {
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    // margin-left: -6px;
-    // background-color: #ddd;
-    // border-radius: 50%;
 
     &::before {
       content: "";
       position: absolute;
-      // left: calc(50% + 2px);
       left: 14px;
       top: 50%;
-      // transform: translate(-50%, -50%) rotate(-45deg);
       transform: translateY(-50%) rotate(-45deg);
       width: 12px;
       height: 12px;

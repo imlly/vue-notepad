@@ -19,7 +19,8 @@
     white-space: nowrap;
   }
 
-  .one-px-line-bottom {
+  .one-px-line-bottom,
+  .one-px-line-right {
     position: relative;
   }
   .one-px-line-bottom::after {
@@ -32,6 +33,15 @@
     border-bottom: 1px solid #ddd;
     transform: scaleY(0.5);
     transform-origin: 0 0;
+  }
+  .one-px-line-right::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    border-right: 1px solid #ddd;
+    transform: scaleX(0.5);
   }
 
   .icon-wrap {
@@ -58,7 +68,7 @@
   }
   .cross-icon {
     position: relative;
-    background: #fff;
+    background: #333;
     height: 20px;
     width: 4px;
     border-radius: 2px;
@@ -70,7 +80,7 @@
       top: 8px;
       height: 4px;
       width: 20px;
-      background: #fff;
+      background: #333;
       border-radius: 2px;
     }
 

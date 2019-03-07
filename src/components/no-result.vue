@@ -1,8 +1,8 @@
 <template>
   <div class="note-empty">
-    <img class="image" src="../assets/empty.png">
-    <div class="message">{{message}}</div>
-    <div class="mock-btn" v-if="showMockBtn" @click="handleClickMockBtn">使用 Mock 数据</div>
+    <img class="empty__image" src="../assets/empty.png">
+    <div class="empty__message">{{message}}</div>
+    <div class="empty__mock-btn" v-if="showMockBtn" @click="handleClickMockBtn">使用 Mock 数据</div>
   </div>
 </template>
 
@@ -26,17 +26,17 @@ export default {
   text-align: center;
   margin-top: 40px;
   color: #999;
-  .image {
+  .empty__image {
     display: block;
     margin: 40px auto;
     width: 180px;
     height: 180px;
     opacity: 0.05;
   }
-  .message {
+  .empty__message {
     margin-bottom: 20px;
   }
-  .mock-btn {
+  .empty__mock-btn {
     display: inline-block;
     font-size: 14px;
     line-height: 1.4;

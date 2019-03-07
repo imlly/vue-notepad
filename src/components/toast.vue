@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="note-toast">
     <div class="note_mask_transparent" v-show="isShowMask && show"></div>
     <div class="note_toast" v-show="show">
       <div class="note_toast_main">

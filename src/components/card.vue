@@ -1,5 +1,5 @@
 <template>
-  <div class="card" v-if="showCard">
+  <div class="note-card" v-if="showCard">
     <div class="card__name one-px-line-bottom">{{title}}</div>
     <div class="item__container">
       <div
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="less">
-.card {
+.note-card {
   position: relative;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
   border-radius: 4px;
