@@ -1,26 +1,30 @@
 <template>
-  <div class="note-confirm" :class="{ show }">
-    <div class="confrim__mask" @click="handleCloseConfirm"></div>
-    <div class="confirm__main">
-      <div class="confirm__header one-px-line-bottom" v-if="headerText">
-        <div class="header__text ellipsis">{{headerText}}</div>
-        <div class="icon-wrap" @click="handleCloseConfirm">
-          <div class="cross-icon"></div>
+  <div class="note-confirm">
+    <transition name="note-fade">
+      <div class="confrim__mask" @click="handleCloseConfirm" v-show="show"></div>
+    </transition>
+    <transition name="note-fade">
+      <div class="confirm__main" v-show="show">
+        <div class="confirm__header one-px-line-bottom" v-if="headerText">
+          <div class="header__text ellipsis">{{headerText}}</div>
+          <div class="icon-wrap" @click="handleCloseConfirm">
+            <div class="cross-icon"></div>
+          </div>
+        </div>
+        <div class="confirm__body one-px-line-bottom">
+          <p class="body__text" v-if="bodyText">{{bodyText}}</p>
+          <slot v-else></slot>
+        </div>
+        <div class="confirm__ops">
+          <div
+            class="op__item ops__cancel one-px-line-right"
+            v-if="showCancel"
+            @click="handleClickCancel"
+          >{{cancelText}}</div>
+          <div class="op__item ops__confirm" @click="handleClickConfirm">{{confirmText}}</div>
         </div>
       </div>
-      <div class="confirm__body one-px-line-bottom">
-        <p class="body__text" v-if="bodyText">{{bodyText}}</p>
-        <slot v-else></slot>
-      </div>
-      <div class="confirm__ops">
-        <div
-          class="op__item ops__cancel one-px-line-right"
-          v-if="showCancel"
-          @click="handleClickCancel"
-        >{{cancelText}}</div>
-        <div class="op__item ops__confirm" @click="handleClickConfirm">{{confirmText}}</div>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -61,13 +65,17 @@ export default {
 </script>
 
 <style lang="less">
+.note-fade-enter-active,
+.note-fade-leave-active {
+  transition: opacity 0.2s;
+}
+.note-fade-enter,
+.note-fade-leave-to {
+  opacity: 0;
+}
+
 .note-confirm {
   position: relative;
-  display: none;
-
-  &.show {
-    display: block;
-  }
 
   .confrim__mask {
     position: fixed;
